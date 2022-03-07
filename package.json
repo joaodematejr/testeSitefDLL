@@ -1,0 +1,33 @@
+{
+    "name": "testesitefdll",
+    "version": "1.0.0",
+    "description": "Testes DLL SITEF",
+    "main": "index.js",
+    "scripts": {
+        "dev": "nodemon --inspect ./index.js 80",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/joaodematejr/testeSitefDLL.git"
+    },
+    "author": "João Dematé Jr",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/joaodematejr/testeSitefDLL/issues"
+    },
+    "homepage": "https://github.com/joaodematejr/testeSitefDLL#readme",
+    "dependencies": {
+        "ffi-napi": "^4.0.3",
+        "finalize": "https://github.com/joaodematejr/finalize.js.git",
+        "ref-array-napi": "^1.2.2",
+        "ref-napi": "^3.0.3",
+        "ref-struct-di": "^1.1.1",
+        "weak-napi": "^2.0.2"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.15",
+        "ts-node": "^10.7.0",
+        "typescript": "^4.6.2"
+    }
+}
