@@ -5,6 +5,7 @@
     "main": "index.js",
     "scripts": {
         "dev": "nodemon --inspect ./index.js 80",
+        "start": "nodemon --watch ts-node ./index.ts -e ts",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
