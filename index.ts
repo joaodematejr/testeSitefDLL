@@ -18,8 +18,8 @@ var rl = readline.createInterface({
 const menu = `
 1 - ConfiguraIntSiTefInterativoEx,
 2 - IniciaFuncaoSiTefInterativo,
-3- VerificaPresencaPinPad
-4- EscreveMensagemPermanentePinPad
+3 - VerificaPresencaPinPad
+4 - EscreveMensagemPermanentePinPad
 `;
 
 const NAME_DLL = "CliSiTef64I.dll";
@@ -40,8 +40,13 @@ async function verificaPresencaPinPad(sitef: any) {
 }
 
 async function iniciaFuncaoSiTef(sitef: any) {
-    res = await sitef.IniciaFuncaoSiTefInterativo(2, "10,00" ,"0", '20220101', '000000', "testeDLL", "", "");
-    return res;
+    let retorno = await sitef.IniciaFuncaoSiTefInterativo(2, "10,00" ,"0", '20220101', '000000', "operadorJoao", "", "");
+    while (retorno === 10000) { // Aguarda o retorno da função
+      const continua = await sitef.ContinuaFuncaoSiTefInterativo(0, 0, 0, 0, "", 0, 0)
+      if (!continua) break;
+      console.log("continua", continua)
+    }
+    return retorno;
 
 }
 
@@ -54,6 +59,7 @@ async function main() {
     IniciaFuncaoSiTefInterativo: ["int",["int", "string", "string", "string", "string", "string", "string", "string"]],
     VerificaPresencaPinPad: ["int",[]],
     EscreveMensagemPermanentePinPad: ["int",["string"]],
+    ContinuaFuncaoSiTefInterativo: ["int",["int", "int", "int", "int", "string", "int", "int"]],
   });
   let leitor = async function () {
     rl.question(menu, async function (comando: string) {
