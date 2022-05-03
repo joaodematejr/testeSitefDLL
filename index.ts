@@ -30,8 +30,13 @@ function loadLibraries() {
 }
 
 async function configuraSiTef(sitef: any) {
-    res = await sitef.ConfiguraIntSiTefInterativoEx("127.0.0.1", "00000000", "11T3642A", "", "[ParmsClient=1=0000000000000;2=0000000000000")
-    return msgConfiguraIntSiTefInterativoEx(res)
+  let iPSiTef = "127.0.0.1";
+  let idLoja = "00000000";
+  let idTerminal = "11T3642A";
+  let reservado = "";
+  let parametrosAdicionais = "[ParmsClient=1=0000000000000;2=0000000000000]"
+  res = await sitef.ConfiguraIntSiTefInterativoEx(iPSiTef, idLoja, idTerminal, reservado, parametrosAdicionais)
+  return msgConfiguraIntSiTefInterativoEx(res)
 }
 
 async function verificaPresencaPinPad(sitef: any) {
@@ -40,11 +45,20 @@ async function verificaPresencaPinPad(sitef: any) {
 }
 
 async function iniciaFuncaoSiTef(sitef: any) {
-    let retorno = await sitef.IniciaFuncaoSiTefInterativo(2, "10,00" ,"0", '20220101', '000000', "operadorJoao", "", "");
+    let funcao = 2;
+    let valor = "10,00";
+    let cupomFiscal = "0";
+    let dataFiscal = "20220101";
+    let horaFiscal = "000000";
+    let operador = "João";
+    let paramAdic = "";
+    let retorno = await sitef.IniciaFuncaoSiTefInterativo(funcao, valor, cupomFiscal, dataFiscal, horaFiscal, operador, paramAdic);
     while (retorno === 10000) { // Aguarda o retorno da função
-      const continua = await sitef.ContinuaFuncaoSiTefInterativo(0, 0, 0, 0, "", 0, 0)
-      if (!continua) break;
+      const continua = sitef.ContinuaFuncaoSiTefInterativo('0', '0', '0', '0', "", '0', 0)
       console.log("continua", continua)
+      if (!continua) break;
+      if (continua === -5) break;
+
     }
     return retorno;
 
@@ -56,10 +70,10 @@ async function main() {
   const dllSitef = loadLibraries();
   const sitef = ffi.Library(dllSitef, {
     ConfiguraIntSiTefInterativoEx: ["int",["string", "string", "string", "string", "string"]],
-    IniciaFuncaoSiTefInterativo: ["int",["int", "string", "string", "string", "string", "string", "string", "string"]],
+    IniciaFuncaoSiTefInterativo: ["int",["int", "string", "string", "string", "string", "string", "string"]],
     VerificaPresencaPinPad: ["int",[]],
     EscreveMensagemPermanentePinPad: ["int",["string"]],
-    ContinuaFuncaoSiTefInterativo: ["int",["int", "int", "int", "int", "string", "int", "int"]],
+    ContinuaFuncaoSiTefInterativo: ["int",["string", "string", "string", "string", "string", "string", "int"]],
   });
   let leitor = async function () {
     rl.question(menu, async function (comando: string) {
